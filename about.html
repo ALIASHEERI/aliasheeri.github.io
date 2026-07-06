@@ -529,17 +529,81 @@
     }
     footer a { color: var(--gold); text-decoration: none; }
 
+    /* ── BURGER MENU ── */
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      z-index: 200;
+    }
+    .burger span {
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: rgba(10,10,10,0.98);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--grey);
+      flex-direction: column;
+      padding: 1rem 0;
+      z-index: 150;
+    }
+    .mobile-menu.show { display: flex; animation: menuSlide 0.25s ease; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid rgba(42,42,42,0.5);
+      transition: color 0.3s, background 0.3s;
+    }
+    .mobile-menu a:hover { color: var(--gold); background: rgba(201,168,76,0.05); }
+    @keyframes menuSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
     @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { gap: 1.2rem; }
-      section { padding: 5rem 1.5rem; }
-      footer { flex-direction: column; gap: 0.5rem; padding: 2rem 1.5rem; }
-      .book-item { grid-template-columns: 1fr; }
-      .memory-banner, .memory-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+      nav { padding: 0.8rem 1rem; }
+      .nav-links { display: none; }
+      .burger { display: flex; }
+      .nav-logo { font-size: 0.95rem; }
+      nav .nav-left > a > div { width: 48px !important; height: 48px !important; }
+      #hero { padding: 7rem 1.2rem 3rem; min-height: unset; }
+      .hero-title { font-size: clamp(1.9rem, 9vw, 2.8rem); }
+      .hero-quote { font-size: 1.05rem; padding-right: 1rem; }
+      section { padding: 4rem 1.2rem; }
+      .thread-text { font-size: 1.05rem; line-height: 2; }
+      .hobbies-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+      .book-item { grid-template-columns: 1fr; padding: 1.5rem; justify-items: center; text-align: center; }
+      .book-cover { width: 130px; }
+      .story-block { padding-right: 1.2rem; margin-bottom: 2.5rem; }
+      .story-title { font-size: 1.2rem; }
+      .story-img { height: 180px; }
+      .pproject-card { padding: 1.5rem; }
+      .pproject-title { font-size: 1.15rem; }
+      .memory-banner { padding: 1rem 1.3rem; flex-direction: column; gap: 0.6rem; align-items: flex-start; }
+      .memory-body { padding: 1.5rem 1.3rem; }
+      .memory-stats { gap: 1.8rem; }
+      .mstat-value { font-size: 1.3rem; }
       .memory-gallery { grid-template-columns: 1fr; }
       .mini-games-grid { grid-template-columns: 1fr; }
       .mini-games-grid img { height: 180px; }
       .memory-gallery img { height: 200px; }
+      footer { flex-direction: column; gap: 0.5rem; padding: 2rem 1.2rem; text-align: center; }
     }
   </style>
 </head>
@@ -556,6 +620,16 @@
       <a href="#hobbies">الهوايات</a>
       <a href="#books">الكتب</a>
       <a href="#memories">ذكريات</a>
+    </div>
+    <button class="burger" onclick="toggleMenu()" aria-label="القائمة">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">السيرة الذاتية</a>
+      <a href="portfolio.html">أعمالي</a>
+      <a href="#hobbies" onclick="toggleMenu()">الهوايات</a>
+      <a href="#books" onclick="toggleMenu()">الكتب</a>
+      <a href="#memories" onclick="toggleMenu()">ذكريات</a>
     </div>
   </nav>
 
@@ -757,6 +831,12 @@
   </div>
 
   <script>
+    // ── MOBILE MENU ──
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('show');
+      document.querySelector('.burger').classList.toggle('open');
+    }
+
     // ── LIGHTBOX ──
     function openLightbox(src) {
       document.getElementById('lightbox-img').src = src;

@@ -807,13 +807,111 @@
     }
 
     /* ── RESPONSIVE ── */
+    /* ── BURGER MENU ── */
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      z-index: 200;
+    }
+    .burger span {
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: rgba(10,10,10,0.98);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--grey);
+      flex-direction: column;
+      padding: 1rem 0;
+      z-index: 150;
+    }
+    .mobile-menu.show { display: flex; animation: menuSlide 0.25s ease; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid rgba(42,42,42,0.5);
+      transition: color 0.3s, background 0.3s;
+    }
+    .mobile-menu a:hover { color: var(--gold); background: rgba(201,168,76,0.05); }
+    @keyframes menuSlide { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
     @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      .nav-links { gap: 1.2rem; }
-      #hero, section { padding: 6rem 1.5rem 3rem; }
+      /* NAV */
+      nav { padding: 0.8rem 1rem; }
+      .nav-links { display: none; }
+      .burger { display: flex; }
+      .nav-logo { font-size: 0.9rem; }
+      nav .nav-left img, nav .nav-left > a > div { width: 48px !important; height: 48px !important; }
+
+      /* HERO — صورة فوق والاسم تحت */
+      #hero {
+        grid-template-columns: 1fr;
+        padding: 6.5rem 1.5rem 3rem;
+        gap: 2.5rem;
+        text-align: center;
+        min-height: unset;
+      }
+      .hero-content { align-items: center; }
+      .hero-name { font-size: clamp(3rem, 16vw, 4.5rem); }
+      .hero-photo-wrap { order: -1; }
+      .hero-photo-card { width: 240px; height: 310px; }
+      .hero-photo-glow { width: 240px; height: 310px; }
+      .hero-question { font-size: 0.95rem; }
+      .hero-scroll { display: none; }
+
+      /* SECTIONS */
+      section { padding: 4rem 1.2rem; }
+      .section-label { margin-bottom: 2rem; }
+
+      /* ABOUT */
       #about { grid-template-columns: 1fr; gap: 2rem; }
-      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
-      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .about-heading { font-size: 1.8rem; }
+
+      /* EXPERIENCE */
+      .exp-timeline { padding-left: 1.5rem; }
+      .exp-card::before { left: -1.9rem; }
+      .exp-header { padding: 1.2rem 1.2rem; }
+      .exp-header-left { gap: 0.7rem; }
+      .exp-logo { width: 36px; height: 36px; }
+      .exp-title { font-size: 1rem; }
+      .exp-body-inner { padding: 0 1.2rem 1.2rem; padding-top: 1rem; }
+
+      /* CERTIFICATIONS — بطاقة وحدة بالصف */
+      #certifications { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .cert-card-img { width: 100% !important; max-width: 100% !important; }
+      .cert-cards-row { gap: 1.2rem; }
+      .cert-img-wrap { height: 200px; }
+
+      /* SKILLS */
+      .skills-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.8rem; }
+
+      /* DOWNLOAD */
+      .download-heading { font-size: 2rem; }
+      .btn-download { padding: 0.9rem 2rem; font-size: 0.8rem; }
+
+      /* FOOTER */
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.2rem; }
     }
   </style>
 </head>
@@ -831,6 +929,18 @@
       <li><a href="#skills">Skills</a></li>
       <li><a href="#download">CV</a></li>
     </ul>
+    <button class="burger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about" onclick="toggleMenu()">About</a>
+      <a href="#experience" onclick="toggleMenu()">Experience</a>
+      <a href="#certifications" onclick="toggleMenu()">Certifications</a>
+      <a href="#skills" onclick="toggleMenu()">Skills</a>
+      <a href="#download" onclick="toggleMenu()">CV</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="about.html">عن علي</a>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -1213,6 +1323,12 @@
     btns.forEach(btn => {
       btn.style.animation = 'none';
     });
+
+    // ── MOBILE MENU ──
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('show');
+      document.querySelector('.burger').classList.toggle('open');
+    }
 
     // ── PHOTO 3D TILT ON MOUSE ──
     const card = document.getElementById('photoCard');
